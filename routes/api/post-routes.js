@@ -9,22 +9,24 @@ router.get('/', (req, res) => {
         attributes: [
             'id',
             'title',
+            'text',
+            'user_id',
             'created_at'
         ],
-        include: [
-            {
-                model: Comment,
-                attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-                include: {
-                    model: User,
-                    attributes: ['username']
-                }
-            },
-            {
-                model: User,
-                attributes: ['username']
-            }
-        ]
+        // include: [
+        //     {
+        //         model: Comment,
+        //         attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+        //         include: {
+        //             model: User,
+        //             attributes: ['username']
+        //         }
+        //     },
+        //     {
+        //         model: User,
+        //         attributes: ['username']
+        //     }
+        // ]
     })
     .then(dbPostData => res.json(dbPostData))
     .catch(err => {
@@ -33,8 +35,6 @@ router.get('/', (req, res) => {
     });
 });
 
-
-// Get post by id
 router.get('/:id', (req, res) => {
     Post.findOne({
         where: {
@@ -43,14 +43,15 @@ router.get('/:id', (req, res) => {
         attributes: [
             'id',
             'title',
+            'text',
             'created_at'
         ],
-        include: [
-            {
-                model: User,
-                attributes: ['username']
-            }
-        ]
+        // include: [
+        //     {
+        //         model: User,
+        //         attributes: ['username']
+        //     }
+        // ]
     })
     .then(dbPostData => {
         if (!dbPostData) {
@@ -65,11 +66,10 @@ router.get('/:id', (req, res) => {
     });
 });
 
-// Create new post
 router.post('/', (req, res) => {
     Post.create({
         title: req.body.title,
-        post_url: req.body.post_url,
+        text: req.body.text,
         user_id: req.body.user_id
     })
     .then(dbPostData => res.json(dbPostData))
@@ -79,11 +79,11 @@ router.post('/', (req, res) => {
     });
 });
 
-// Update post by id
 router.put('/:id', (req, res) => {
     Post.update(
         {
-            title: req.body.title
+            title: req.body.title,
+            text: req.body.text
         },
         {
             where: {
@@ -104,7 +104,6 @@ router.put('/:id', (req, res) => {
     });
 });
 
-// Delete post by id
 router.delete('/:id', (req, res) => {
     Post.destroy({
         where: {
@@ -123,3 +122,5 @@ router.delete('/:id', (req, res) => {
         res.status(500).json(err);
     });
 });
+
+module.exports = router;
