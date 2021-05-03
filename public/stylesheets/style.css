@@ -10,7 +10,7 @@
     color: #333;
   }
   
-  a {
+  a, h3, h4 {
     text-decoration: none;
     color: #225ca3;
     font-weight: bold;
